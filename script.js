@@ -1,6 +1,8 @@
 const itemForm = document.querySelector('#item-form');
 const itemInput = document.querySelector('#item-input');
 const itemList = document.querySelector('#item-list');
+const clearAll = document.querySelector('#clear');
+const filter = document.querySelector('#filter');
 
 function addItem(e) {
 	e.preventDefault(); // prevents the default behavior of an event
@@ -21,6 +23,8 @@ function addItem(e) {
 	newLi.appendChild(liBtn);
 
 	itemList.appendChild(newLi);
+
+	checkUI();
 
 	// Empty input value after addition of item
 	itemInput.value = '';
@@ -43,6 +47,52 @@ function createIcon(classes) {
 	return icon;
 }
 
+function removeItem(e) {
+	const iconBtn = e.target.parentElement;
+	if (iconBtn.classList.contains('remove-item')) {
+		if (confirm('Are you sure?')) {
+			iconBtn.parentElement.remove();
+
+			checkUI();
+		}
+	}
+}
+
+function clearAllItems() {
+	itemList.innerHTML = '';
+	checkUI();
+}
+
+function filterItems(e) {
+	const items = itemList.querySelectorAll('li');
+	const text = e.target.value.toLowerCase();
+
+	items.forEach((item) => {
+		const itemName = item.firstChild.textContent.toLowerCase();
+		if (itemName.indexOf(text) != -1) {
+			item.style.display = 'flex';
+		} else {
+			item.style.display = 'none';
+		}
+	});
+}
+
+function checkUI() {
+	const items = itemList.querySelectorAll('li');
+	if (items.length === 0) {
+		clearAll.style.display = 'none';
+		filter.style.display = 'none';
+	} else {
+		clearAll.style.display = 'block';
+		filter.style.display = 'block';
+	}
+}
+
 // Event Listeners
 
 itemForm.addEventListener('submit', addItem);
+itemList.addEventListener('click', removeItem);
+clearAll.addEventListener('click', clearAllItems);
+filter.addEventListener('input', filterItems);
+
+checkUI();
