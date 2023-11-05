@@ -1,9 +1,10 @@
 const itemForm = document.querySelector('#item-form');
-const itemInput = document.querySelector('#item-input');
+const itemInput = itemForm.querySelector('#item-input');
+const formBtn = itemForm.querySelector('.btn');
 const itemList = document.querySelector('#item-list');
 const clearAll = document.querySelector('#clear');
 const filter = document.querySelector('#filter');
-const formBtn = itemForm.querySelector('button');
+
 let isEditMode = false;
 
 function displayItems() {
@@ -17,17 +18,16 @@ function onAddItemSubmit(e) {
 
 	const inputValue = itemInput.value;
 
-	//Validate input
+	// Validate input
 	if (inputValue === '') {
 		alert('Enter the item name!!');
 		return;
 	}
 
-	//Check for edit mode
+	// Check for edit mode
 
 	if (isEditMode) {
 		const itemToEdit = itemList.querySelector('.edit-mode');
-
 		removeItemFromStorage(itemToEdit.textContent);
 		itemToEdit.remove();
 		isEditMode = false;
@@ -77,18 +77,14 @@ function createIcon(classes) {
 
 function addItemToStorage(item) {
 	const itemsFromStorage = getItemsFromStorage();
-
 	itemsFromStorage.push(item);
-
 	localStorage.setItem('items', JSON.stringify(itemsFromStorage));
 }
 
 function getItemsFromStorage() {
 	let itemsFromStorage = localStorage.getItem('items');
-
 	itemsFromStorage =
 		itemsFromStorage === null ? [] : JSON.parse(itemsFromStorage);
-
 	return itemsFromStorage;
 }
 
@@ -123,7 +119,6 @@ function setItemToEdit(item) {
 function removeItem(item) {
 	if (confirm('Are you sure?')) {
 		item.remove();
-
 		removeItemFromStorage(item.textContent);
 
 		checkUI();
